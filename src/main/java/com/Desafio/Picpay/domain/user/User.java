@@ -1,5 +1,6 @@
 package com.Desafio.Picpay.domain.user;
 
+import com.Desafio.Picpay.dtos.UserDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +12,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 import java.math.BigDecimal;
 
@@ -21,7 +24,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+
 public class User {
 
     @Id
@@ -35,6 +40,32 @@ public class User {
     private String email;
     private String password;
     private BigDecimal balance;
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public  User(UserDTO data){
+        this.firstName = data.firstName();
+        this.lastName = data.lastName();
+        this.balance = data.balance();
+        this.userType = data.userType();
+        this.password = data.password();
+        this.document = data.document();
+        this.email = data.email();
+    }
 }
