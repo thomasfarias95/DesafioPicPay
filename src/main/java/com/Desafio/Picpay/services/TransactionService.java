@@ -6,14 +6,9 @@ import com.Desafio.Picpay.domain.user.User;
 import com.Desafio.Picpay.dtos.TransactionDTO;
 import com.Desafio.Picpay.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Service
 public class TransactionService {
@@ -25,7 +20,7 @@ public class TransactionService {
     private TransactionRepository repository;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private AuthorizationService authService;
 
     @Autowired
     private  NotificationService notificationService;
@@ -37,7 +32,7 @@ public class TransactionService {
 
         userService.validateTransaction(sender, transaction.value());
 
-        boolean inAuthorized = this.authorizeTransaction(sender, transaction.value());
+        boolean inAuthorized = this.authService.authorizeTransaction(sender, transaction.value());
         if (!inAuthorized) {
             throw new Exception("Transação não autorizada");
         }
@@ -60,11 +55,5 @@ public class TransactionService {
         return  newTransaction;
     }
 
-    public boolean authorizeTransaction(User sender, BigDecimal value){
-     ResponseEntity<Map> authotizationResponse= restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class );
-             if(authotizationResponse.getStatusCode() == HttpStatus.OK ){
-                 String message = (String) authotizationResponse.getBody().get("message");
-                 return "Autorizado".equalsIgnoreCase(message);
-             }else return false;
-    }
+
 }

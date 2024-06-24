@@ -59,13 +59,18 @@ public class User {
     public String getEmail() {
         return email;
     }
-    public  User(UserDTO data){
-        this.firstName = data.firstName();
-        this.lastName = data.lastName();
-        this.balance = data.balance();
-        this.userType = data.userType();
-        this.password = data.password();
-        this.document = data.document();
-        this.email = data.email();
+
+
+
+    public  User(UserDTO user){
+
+        this.firstName = user.firstName();
+        this.lastName = user.lastName();
+        this.document = user.document();
+        this.balance = user.balance();
+        this.email = user.email();
+        this.password = user.password();
+        this.userType = user.userType();
+
     }
 }
